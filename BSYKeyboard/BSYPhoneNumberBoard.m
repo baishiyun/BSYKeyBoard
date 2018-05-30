@@ -1,32 +1,33 @@
 //
-//  BSYIDCardBoard.m
+//  BSYPhoneNumberBoard.m
 //  BSYKeyboard
 //
-//  Created by 白仕云 on 2018/5/28.
+//  Created by 白仕云 on 2018/5/30.
 //  Copyright © 2018年 BSY.com. All rights reserved.
 //
 
+#import "BSYPhoneNumberBoard.h"
 
+static NSString *const  defalutText = @"金贵创新支付安全输入";
 
-#import "BSYIDCardBoard.h"
-static NSString *const  defalutText = @"金贵创新安全输入";
-
-@interface BSYIDCardBoard()
+@interface BSYPhoneNumberBoard()
 @property (nonatomic ,strong)NSMutableArray *array;
+@property (nonatomic ,copy)NSString *pointString;
 @end
-@implementation BSYIDCardBoard
+@implementation BSYPhoneNumberBoard
 
 -(instancetype)initWithFrame:(CGRect)frame inputViewStyle:(UIInputViewStyle)inputViewStyle
 {
     self = [super initWithFrame:frame inputViewStyle:inputViewStyle];
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
-        [self creatUIForBSYIDCardBoard];
+        self.pointString = @"";
+        [self creatUIForBSYPayBoard];
     }
     return self;
 }
 
--(void)creatUIForBSYIDCardBoard
+-(void)creatUIForBSYPayBoard
 {
     //每个Item宽高
     CGFloat W = ([UIScreen mainScreen].bounds.size.width-6)/3.0;
@@ -44,7 +45,7 @@ static NSString *const  defalutText = @"金贵创新安全输入";
         NSUInteger Y = (index/ rank) * (H +rowMargin);
         //Item top
         CGFloat top = 0;
-         UIButton *KeyBoardItem = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIButton *KeyBoardItem = [UIButton buttonWithType:UIButtonTypeCustom];
         [KeyBoardItem setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [KeyBoardItem setTitle:self.array[index] forState:UIControlStateNormal];
         KeyBoardItem.titleLabel.font = [UIFont systemFontOfSize:25];
@@ -56,15 +57,16 @@ static NSString *const  defalutText = @"金贵创新安全输入";
         KeyBoardItem.layer.rasterizationScale  = [[UIScreen mainScreen] scale];
         KeyBoardItem.layer.shouldRasterize = true;
         KeyBoardItem.frame = CGRectMake(X, Y+top, W, H);
-        KeyBoardItem.tag = 1000000000+index;
+        KeyBoardItem.tag =1000000000+index;
         [self addSubview:KeyBoardItem];
         [KeyBoardItem addTarget:self action:@selector(KeyBoardItemActionClick:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
+
 -(void)KeyBoardItemActionClick:(UIButton *)finishedBtn
 {
-    if (self.BSYIDCardBoardStringBlock) {
-        self.BSYIDCardBoardStringBlock(finishedBtn.currentTitle);
+    if (self.BSYPhoneNumberBoardStringBlock) {
+        self.BSYPhoneNumberBoardStringBlock(finishedBtn.currentTitle);
     }
 }
 /**
@@ -82,6 +84,7 @@ static NSString *const  defalutText = @"金贵创新安全输入";
  */
 -(void)setShowKeyBoardItemBackColor:(UIColor *)keyBoardItemBackColor
 {
+
     keyBoardItemBackColor = keyBoardItemBackColor?keyBoardItemBackColor:[UIColor whiteColor];
     for (UIButton *btn in self.subviews) {
         if (btn.tag>=1000000000) {
@@ -102,13 +105,16 @@ static NSString *const  defalutText = @"金贵创新安全输入";
             [btn setTitleColor:keyBoardItemTextColor forState:UIControlStateNormal];
         }
     }
+
 }
+
 -(NSMutableArray *)array
 {
     if (!_array) {
-        _array = [NSMutableArray arrayWithObjects:@"1",@"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9",@"X", @"0",@"Delete",  nil];
+        _array = [NSMutableArray arrayWithObjects:@"1",@"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9",@"", @"0",@"Delete",  nil];
     }
     return _array;
 }
+
 
 @end

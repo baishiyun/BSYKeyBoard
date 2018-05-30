@@ -1,18 +1,16 @@
 //
-//  BSYIDCardBoard.h
+//  BSYPassWordBoard.h
 //  BSYKeyboard
 //
-//  Created by 白仕云 on 2018/5/28.
+//  Created by 白仕云 on 2018/5/30.
 //  Copyright © 2018年 BSY.com. All rights reserved.
 //
 
-
-
 #import <UIKit/UIKit.h>
 
-@interface BSYIDCardBoard : UIInputView
-@property (nonatomic ,copy)void(^BSYIDCardBoardStringBlock)(NSString *keyBoardString);
+@interface BSYPassWordBoard : UIInputView
 
+@property (nonatomic ,copy)void(^BSYPassWordBoardStringBlock)(NSString *keyBoardString);
 /**
  键盘背景颜色
  @param showKeyBoardBackColor   键盘背景颜色

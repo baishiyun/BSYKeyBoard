@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
   s.name         = "BSYKeyBoard" 
-  s.version      = "1.1.0"     
+  s.version      = "1.1.1"     
   s.license      = "MIT"       
-  s.summary      = "BSYKeyBoard是一款自定义键盘，键盘类型有身份证类型键盘/密码键盘/支付键盘/手机号键盘等。并且已经适配iphone和iPad所有机型，希望大家喜欢并Star支持"
+  s.summary      = "BSYKeyBoard是一款自定义键盘，键盘类型有身份证类型键盘/密码键盘/支付键盘/手机号键盘等。1.1.1版本优化和新增加调用系统键盘的功能！并且已经适配iphone和iPad所有机型，希望大家喜欢并Star支持"
 
   s.homepage     = "https://github.com/baishiyun/BSYKeyBoard" # 你的主页
   s.source       = { :git => "https://github.com/baishiyun/BSYKeyBoard.git", :tag => "#{s.version}" }

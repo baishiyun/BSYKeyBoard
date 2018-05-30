@@ -9,7 +9,6 @@
 #import "BSYPayBoard.h"
 static NSString *const  defalutText = @"金贵创新支付安全输入";
 
-
 @interface BSYPayBoard()
 @property (nonatomic ,strong)NSMutableArray *array;
 @property (nonatomic ,copy)NSString *pointString;
@@ -21,7 +20,7 @@ static NSString *const  defalutText = @"金贵创新支付安全输入";
 {
     self = [super initWithFrame:frame inputViewStyle:inputViewStyle];
     if (self) {
-        self.backgroundColor =[UIColor grayColor];
+        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
         self.pointString = @"";
         [self creatUIForBSYPayBoard];
     }
@@ -58,6 +57,7 @@ static NSString *const  defalutText = @"金贵创新支付安全输入";
         KeyBoardItem.layer.rasterizationScale  = [[UIScreen mainScreen] scale];
         KeyBoardItem.layer.shouldRasterize = true;
         KeyBoardItem.frame = CGRectMake(X, Y+top, W, H);
+        KeyBoardItem.tag = 1000000000+index;
         [self addSubview:KeyBoardItem];
         [KeyBoardItem addTarget:self action:@selector(KeyBoardItemActionClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -75,7 +75,7 @@ static NSString *const  defalutText = @"金贵创新支付安全输入";
  */
 -(void)setShowKeyBoardBackColor:(UIColor *)showKeyBoardBackColor
 {
-    self.backgroundColor = showKeyBoardBackColor?showKeyBoardBackColor:[UIColor grayColor];
+    self.backgroundColor = showKeyBoardBackColor?showKeyBoardBackColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
 }
 
 /**
@@ -84,6 +84,12 @@ static NSString *const  defalutText = @"金贵创新支付安全输入";
  */
 -(void)setShowKeyBoardItemBackColor:(UIColor *)keyBoardItemBackColor
 {
+    keyBoardItemBackColor = keyBoardItemBackColor?keyBoardItemBackColor:[UIColor whiteColor];
+    for (UIButton *btn in self.subviews) {
+        if (btn.tag>=1000000000) {
+            btn.backgroundColor = keyBoardItemBackColor;
+        }
+    }
 
 }
 /**
@@ -92,14 +98,19 @@ static NSString *const  defalutText = @"金贵创新支付安全输入";
  */
 -(void)setShowKeyBoardItemTextColor:(UIColor *)keyBoardItemTextColor
 {
-
+    keyBoardItemTextColor = keyBoardItemTextColor?keyBoardItemTextColor:[UIColor blackColor];
+    for (UIButton *btn in self.subviews) {
+        if (btn.tag>=1000000000) {
+            [btn setTitleColor:keyBoardItemTextColor forState:UIControlStateNormal];
+        }
+    }
 
 }
 
 -(NSMutableArray *)array
 {
     if (!_array) {
-        _array = [NSMutableArray arrayWithObjects:@"1",@"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9",@".", @"0",@"删除",  nil];
+        _array = [NSMutableArray arrayWithObjects:@"1",@"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9",@".", @"0",@"Delete",  nil];
     }
     return _array;
 }

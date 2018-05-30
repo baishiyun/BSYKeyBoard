@@ -1,5 +1,5 @@
 //
-//  BSYCertificateIdentification.h
+//  BSYTextFiled.h
 //  BSYKeyboard
 //
 //  Created by 白仕云 on 2018/5/28.
@@ -11,10 +11,11 @@
 
 typedef enum : NSUInteger {
     BSYBoardTypeNone,
+    BSYPhoneNumberType,
     BSYIDCardType,
     BSYPayType,
     BSYPassWordType,
-}   BSYBoardType;
+}BSYBoardType;
 
 @interface BSYTextFiled : UITextField
 /**
@@ -30,6 +31,15 @@ typedef enum : NSUInteger {
  */
 @property (nonatomic ,strong)UIColor *showKeyBoardBackColor;
 
+/**
+ 按键背景颜色
+ */
+@property (nonatomic ,strong)UIColor *keyBoardItemBackColor;
+
+/**
+ 按键字体颜色
+ */
+@property (nonatomic ,strong)UIColor *keyBoardItemTextColor;
 
 /**
  键盘ToolBar颜色

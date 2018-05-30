@@ -1,5 +1,5 @@
 //
-//  BSYCertificateIdentification.m
+//  BSYTextFiled.m
 //  BSYKeyboard
 //
 //  Created by 白仕云 on 2018/5/28.
@@ -10,15 +10,17 @@
 
 #import "BSYTextFiled.h"
 #import "BSYIDCardBoard.h"
+#import "BSYPhoneNumberBoard.h"
 #import "BSYPayBoard.h"
 #import "BSYBoardToolBar.h"
-
+#import "BSYPassWordBoard.h"
 @interface BSYTextFiled()
 @property (nonatomic ,strong)BSYIDCardBoard *bsy_idCardBoard;
 @property (nonatomic ,strong)BSYPayBoard *bsy_PayBoard;
+@property (nonatomic ,strong)BSYPhoneNumberBoard *bsy_phoneNumberBoard;
+@property (nonatomic ,strong)BSYPassWordBoard *bsy_passWordBoard;
 @property (nonatomic ,strong)BSYBoardToolBar *toolBar;
 @property (nonatomic ,copy)NSString *currentString;
-@property (nonatomic ,strong) UICollectionViewFlowLayout *layout;
 @end
 @implementation BSYTextFiled
 
@@ -26,11 +28,12 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.inputAccessoryView =self.toolBar;
         [self addViewWithKeyBoardType:keyBoardType];
         self.leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 35)];
         self.leftViewMode = UITextFieldViewModeAlways;
         self.currentString = @"";
+
+        
     }
     return self;
 }
@@ -41,30 +44,40 @@
  */
 -(void)addViewWithKeyBoardType:(BSYBoardType)keyBoardType
 {
+
+    UIView *window = [[[[[UIApplication sharedApplication] windows] lastObject] subviews] lastObject];
+
+    NSLog(@"   %f",[window.subviews lastObject].frame.size.height);
+
     switch (keyBoardType) {
         case BSYIDCardType:
-            [self BSYIDCardType:keyBoardType];
+            self.inputAccessoryView =self.toolBar;
+            [self BSYIDCardType:keyBoardType ];
+            break;
+        case BSYPhoneNumberType:
+            self.inputAccessoryView =self.toolBar;
+            [self BSYPhoneNumberBoardType:keyBoardType ];
             break;
         case BSYPayType:
-            [self BSYPayBoardWithKeyBoardType:keyBoardType];
+            self.inputAccessoryView =self.toolBar;
+            [self BSYPayBoardWithKeyBoardType:keyBoardType ];
             break;
         case BSYPassWordType:
-            break;
+            self.inputAccessoryView =self.toolBar;
+            [self BSYPassWordBoardType:keyBoardType ];
 
+            break;
         case BSYBoardTypeNone:
-            self.inputAccessoryView = nil;
-            self.inputView = nil;
+
             break;
         default:
             break;
     }
-
     __weak typeof(self)selfWeak  =self;
     [self.toolBar setBSYBoardToolBarFinishedBtnBlock:^(NSString *currentString) {
         [selfWeak resignFirstResponder];
     }];
 }
-
 /**
  身份证的键盘
  */
@@ -76,12 +89,39 @@
         [selfWeak ProcessingResultingString:keyBoardString bsyBoard:selfWeak.bsy_idCardBoard];
     }];
 }
+
+/**
+ 手机号的键盘
+ */
+-(void)BSYPhoneNumberBoardType:(BSYBoardType)keyBoardType
+{
+    self.inputView = self.bsy_phoneNumberBoard;
+    __weak typeof(self)selfWeak  =self;
+    [self.bsy_phoneNumberBoard setBSYPhoneNumberBoardStringBlock:^(NSString *keyBoardString) {
+        [selfWeak ProcessingResultingString:keyBoardString bsyBoard:selfWeak.bsy_phoneNumberBoard];
+    }];
+}
+
+/**
+ 密码的键盘
+ */
+-(void)BSYPassWordBoardType:(BSYBoardType)keyBoardType
+{
+
+    self.inputView = self.bsy_passWordBoard;
+    __weak typeof(self)selfWeak  =self;
+    [self.bsy_passWordBoard setBSYPassWordBoardStringBlock:^(NSString *keyBoardString) {
+        [selfWeak ProcessingResultingString:keyBoardString bsyBoard:selfWeak.bsy_passWordBoard];
+    }];
+}
+
+
 /**
  支付的键盘
  */
 -(void)BSYPayBoardWithKeyBoardType:(BSYBoardType)keyBoardType
 {
- self.inputView = self.bsy_PayBoard;
+    self.inputView = self.bsy_PayBoard;
     __weak typeof(self)selfWeak  =self;
     [self.bsy_PayBoard setBSYPayBoardStringBlock:^(NSString *keyBoardString) {
         [selfWeak ProcessingResultingString:keyBoardString bsyBoard:selfWeak.bsy_PayBoard];
@@ -94,7 +134,7 @@
  */
 -(void)ProcessingResultingString:(NSString *)keyBoardString bsyBoard:(UIView *)bsyBoard
 {
-    if ([keyBoardString isEqualToString:@"删除"]) {
+    if ([keyBoardString isEqualToString:@"Delete"]) {
         if (![self.currentString isEqualToString:@""]) {
             self.currentString = [self.currentString substringToIndex:self.currentString.length-1];
         }
@@ -116,8 +156,34 @@
     _showKeyBoardBackColor = showKeyBoardBackColor;
     [self.bsy_idCardBoard setShowKeyBoardBackColor:showKeyBoardBackColor];
     [self.bsy_PayBoard setShowKeyBoardBackColor:showKeyBoardBackColor];
+    [self.bsy_phoneNumberBoard setShowKeyBoardBackColor:showKeyBoardBackColor];
+    [self.bsy_passWordBoard setShowKeyBoardBackColor:showKeyBoardBackColor];
 }
 
+/**
+ 按键背景颜色
+ */
+-(void)setKeyBoardItemBackColor:(UIColor *)keyBoardItemBackColor
+{
+    _keyBoardItemBackColor = keyBoardItemBackColor;
+    [self.bsy_idCardBoard setShowKeyBoardItemBackColor:keyBoardItemBackColor];
+    [self.bsy_PayBoard setShowKeyBoardItemBackColor:keyBoardItemBackColor];
+    [self.bsy_phoneNumberBoard setShowKeyBoardItemBackColor:keyBoardItemBackColor];
+    [self.bsy_passWordBoard setShowKeyBoardItemBackColor:keyBoardItemBackColor];
+
+}
+
+/**
+ 按键字体颜色
+ */
+-(void)setKeyBoardItemTextColor:(UIColor *)keyBoardItemTextColor
+{
+    _keyBoardItemTextColor = keyBoardItemTextColor;
+    [self.bsy_idCardBoard setShowKeyBoardItemTextColor:keyBoardItemTextColor];
+    [self.bsy_PayBoard setShowKeyBoardItemTextColor:keyBoardItemTextColor];
+    [self.bsy_phoneNumberBoard setShowKeyBoardItemTextColor:keyBoardItemTextColor];
+    [self.bsy_passWordBoard setShowKeyBoardItemTextColor:keyBoardItemTextColor];
+}
 /**
  键盘ToolBar颜色
  */
@@ -163,6 +229,19 @@
     }
     return _bsy_idCardBoard;
 }
+
+/**
+ 创建手机号键盘View
+ @return 返回键盘View
+ */
+-(BSYPhoneNumberBoard *)bsy_phoneNumberBoard
+{
+    if (!_bsy_phoneNumberBoard) {
+        _bsy_phoneNumberBoard = [[BSYPhoneNumberBoard alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 205) inputViewStyle:UIInputViewStyleDefault];
+    }
+    return _bsy_phoneNumberBoard;
+}
+
 /**
  创建支付键盘View
  @return 返回键盘View
@@ -176,7 +255,19 @@
 }
 
 /**
- 创建支付键盘View
+ 创建密码键盘View
+ @return 返回键盘View
+ */
+-(BSYPassWordBoard *)bsy_passWordBoard
+{
+    if (!_bsy_passWordBoard) {
+        _bsy_passWordBoard = [[BSYPassWordBoard alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 205) inputViewStyle:UIInputViewStyleDefault];
+    }
+    return _bsy_passWordBoard;
+}
+
+/**
+ 创建ToolBarView
  @return 返回键盘View
  */
 -(BSYBoardToolBar *)toolBar
